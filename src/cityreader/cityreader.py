@@ -3,11 +3,11 @@
 class City:
     def __init__(self, name, lat, lon):
         self.name = name
-        self.lat = lat
-        self.lon = lon
+        self.lat = float(lat)
+        self.lon = float(lon)
 
     def __str__(self):
-        return f"{self.name}, LAT: {self.lat} LON: {self.lon}"
+        return f"{self.name} {self.lat} {self.lon}"
 
 
 # We have a collection of US cities with population over 750,000 stored in the
@@ -24,11 +24,31 @@ class City:
 # should not be loaded into a City object.
 cities = []
 
+# How is the CSV layed out? - First line describes fields
+# What does the first line look like? - city,state_name,county_name,lat,lng,population,density,timezone,zips
+# What information do we want from this file? - city, lat, lng
+# Where do we want to store this information? - Each city into a City instance and appended to a cities list
+
+# Read cities.csv, add each city with lat, lon to a City instance and append to cities list
+# Import csv module
+import csv
+
 
 def cityreader(cities=[]):
-    # TODO Implement the functionality to read from the 'cities.csv' file
     # For each city record, create a new City instance and add it to the
     # `cities` list
+
+    # Open csv file
+    with open("cities.csv") as csv_file:
+        # Create csv reader
+        csv_reader = csv.reader(csv_file, delimiter=",")
+
+        # Skip header
+        next(csv_reader)
+
+        # Read csv rows, create City instances and append to cities list
+        for row in csv_reader:
+            cities.append(City(row[0], row[3], row[4]))
 
     return cities
 
